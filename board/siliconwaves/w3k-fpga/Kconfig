@@ -1,0 +1,45 @@
+if TARGET_SILICONWAVES_FPGA
+
+config SYS_BOARD
+	default "w3k-fpga"
+
+config SYS_VENDOR
+	default "siliconwaves"
+
+config SYS_CPU
+	default "wave3000"
+
+config SYS_CONFIG_NAME
+	default "siliconwaves-fpga"
+
+config TEXT_BASE
+	default 0x80200000 if SPL
+	default 0x80000000 if !RISCV_SMODE
+	default 0x80200000 if RISCV_SMODE
+
+config SPL_TEXT_BASE
+	default 0x08000000
+
+config SPL_OPENSBI_LOAD_ADDR
+	default 0x80000000
+
+config SYS_INIT_SP_ADDR
+	default 0x80200000
+
+config BOARD_SPECIFIC_OPTIONS # dummy
+	def_bool y
+	select SILICONWAVES_WAVE3000
+	select SUPPORT_SPL
+	select BINMAN
+	imply CMD_MMC
+	imply CMD_DHCP
+	imply CMD_FS_GENERIC
+	imply CMD_NET
+	imply CMD_PING
+	imply CMD_SF
+	imply IP_DYN
+	imply PHY_LIB
+	imply PHY_MSCC
+	imply SILICONWAVES_SDHCI
+	
+endif

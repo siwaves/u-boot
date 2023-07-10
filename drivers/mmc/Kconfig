@@ -818,6 +818,12 @@ config MMC_MTK
 	  This is needed if support for any SD/SDIO/MMC devices is required.
 	  If unsure, say N.
 
+config SILICONWAVES_SDHCI
+	bool "Siliconwaves SD/MMC Host Controller support"
+	help
+	  This selects support for the SD/MMC Host Controller on
+	  Anarion SoCs.
+	  
 endif
 
 config FSL_ESDHC

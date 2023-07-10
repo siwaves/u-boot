@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2023-2024 Siliconwaves, Inc
+ */
+
+#include "binman.dtsi"
+#include "wave3000-u-boot.dtsi"
+/ {
+	memory@80000000 {
+		u-boot,dm-spl;
+	};
+
+	rtcclk {
+		u-boot,dm-spl;
+	};
+
+};
+
+&clint {
+	clocks = <&rtcclk>;
+};

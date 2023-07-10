@@ -46,4 +46,11 @@ config SIFIVE_CCACHE
 	  This driver is for SiFive Composable L2/L3 cache. It enables cache
 	  ways of composable cache.
 
+config SILICONWAVES_CCACHE
+	bool "Siliconwaves composable cache"
+	select CACHE
+	help
+	  This driver is for Siliconwaves Composable L2/L3 cache. It enables cache
+	  ways of composable cache.
+
 endmenu

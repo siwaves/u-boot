@@ -255,11 +255,18 @@ void ns16550_init(struct ns16550 *com_port, int baud_divisor)
 #if defined(CONFIG_ARCH_OMAP2PLUS) || defined(CONFIG_OMAP_SERIAL)
 	serial_out(0x7, &com_port->mdr1);	/* mode select reset TL16C750*/
 #endif
-
+#ifdef CONFIG_SILICONWAVES_WAVE3000
+	serial_out(0, &com_port->mcr);
+#else
 	serial_out(UART_MCRVAL, &com_port->mcr);
+#endif
 	serial_out(ns16550_getfcr(com_port), &com_port->fcr);
 	/* initialize serial config to 8N1 before writing baudrate */
+#ifdef CONFIG_SILICONWAVES_WAVE3000
+	serial_out(0, &com_port->lcr);
+#else
 	serial_out(UART_LCRVAL, &com_port->lcr);
+#endif
 	if (baud_divisor != -1)
 		ns16550_setbrg(com_port, baud_divisor);
 #if defined(CONFIG_ARCH_OMAP2PLUS) || defined(CONFIG_SOC_DA8XX) || \
@@ -420,16 +427,31 @@ static int ns16550_serial_getc(struct udevice *dev)
 	return serial_in(&com_port->rbr);
 }
 
+#ifdef CONFIG_SILICONWAVES_WAVE3000
+static void wave3000_serial_clock_up(struct udevice *dev)
+{
+	struct ns16550 *const com_port = dev_get_priv(dev);
+	struct ns16550_plat *plat = com_port->plat;
+	uint clock_value = (0xfffffff0);
+	unsigned long addr = plat->base + 8;
+	serial_out_shift((void*)addr, 0, clock_value);
+}
+#endif
+
 static int ns16550_serial_setbrg(struct udevice *dev, int baudrate)
 {
 	struct ns16550 *const com_port = dev_get_priv(dev);
 	struct ns16550_plat *plat = com_port->plat;
 	int clock_divisor;
-
+#ifdef CONFIG_SILICONWAVES_WAVE3000
+	clock_divisor = plat->clock/baudrate;
+#else
 	clock_divisor = ns16550_calc_divisor(com_port, plat->clock, baudrate);
-
+#endif
 	ns16550_setbrg(com_port, clock_divisor);
-
+#ifdef CONFIG_SILICONWAVES_WAVE3000
+	wave3000_serial_clock_up(dev);
+#endif
 	return 0;
 }
 

@@ -1,0 +1,6 @@
+Siliconwaves FPGA board
+M:	Richard Dai <richard@siliconwaves.com>
+S:	Maintained
+F:	board/siliconwaves/w3k-fpga/
+F:	include/configs/siliconwaves-fpga.h
+F:	configs/siliconwaves_fpga_defconfig
